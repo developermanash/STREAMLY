@@ -1,0 +1,3 @@
+# STREAMFY 🎵🎬
+
+Fullstack application
