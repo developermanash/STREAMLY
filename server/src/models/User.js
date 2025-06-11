@@ -64,7 +64,15 @@ if(!this.isModified("password")) return next();
     } catch (error) {
         next(error)
     }
-})
+});
+
+//comparing password for login rouute
+
+userSchema.methods.matchPassword = async function (enteredPassword){
+   const isPasswordCorrect = await bcrypt.compare(enteredPassword,this.password);
+   
+   return isPasswordCorrect;
+}
 const User = mongoose.model("User",userSchema);
 
 export default User;
