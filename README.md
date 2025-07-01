@@ -1,5 +1,10 @@
 # 🌍 Streamly-Langbook -Full Stack Chat and Videocalling Platform
 
+## 📸 Preview
+
+![App Screenshot](https://raw.githubusercontent.com/developermanash/STREAMLY/refs/heads/main/client/public/SS.png)
+
+
 **Streamly-Langbook** is a social platform designed to make **language learning immersive, interactive, and global**. Meet people from different countries, chat, make video calls, and grow your language skills naturally through real social interactions.
 
 🟢 **Live Demo:** [langbook-qu09.onrender.com](https://langbook-qu09.onrender.com)  
