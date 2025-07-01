@@ -6,10 +6,10 @@ export async function getRecommendedUsers(req, res) {
     try {
         const currentUserId = req.user.id;
         const currentUser = req.user;
-        const recommendedUsers = await user.find({
+        const recommendedUsers = await User.find({
             $and: [
                 { _id: { $ne: currentUserId } },//exclude current user
-                { $id: { $nin: currentUser.friends } },//exclude current user friends
+                { _id: { $nin: currentUser.friends } },//exclude current user friends
                 { isOnboarded: true }
             ],
         })
@@ -23,60 +23,63 @@ export async function getRecommendedUsers(req, res) {
 
 
 export async function getMyFriends(req, res) {
-    try {
-        friends
-        const user = await User.findById(req.user.id).select("friends")
-            .populate("friends", "fullName profilePic nativeLanguage learningLanguage");
+  try {
+    const user = await User.findById(req.user.id)
+      .select("friends")
+      .populate("friends", "fullName profilePic nativeLanguage learningLanguage");
 
-        res.status(200).json(user.friends);
-    } catch (error) {
-        console.error("Error in getMyFriends conntroller", error.message);
-        res.status(500).json({ message: "internal server error" });
-    }
+    res.status(200).json(user.friends);
+  } catch (error) {
+    console.error("Error in getMyFriends controller", error.message);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
 }
 
 
 export async function sendFriendRequest(req, res) {
-    try {
-        const myId = req.user.id;
-        const { id: recipentId } = req.params;
+  try {
+    const myId = req.user.id;
+    const { id: recipientId } = req.params;
 
-        //Prevent sending req to yourself
-        if (myId === recipentId) {
-            return res.status(400).json({ message: "you cant send friend request to yourself" });
-        }
-
-        const recipent = await User.findById(recipentId)
-        if (!recipentId) {
-            return res.status(400).json({ message: "Recipent not found" });
-        }
-
-        //check if user is already friends 
-
-        if (recipent.friends.includes(myId)) {
-            return res.status(400).json({ message: "you are already friends with this user" });
-        }
-
-        //check if a request is already exists
-        const existingRequest = await FriendRequest.findOne({
-            $or: [
-                { sender: myId, recipient: recipentId },
-                { sender: recipentId, recipient: myId },
-            ],
-        });
-        if (existingRequest) {
-            return res.status(400).json({ message: "Friend request already exists" })
-        };
-
-        const friendRequest = await FriendRequest.create({
-            sender: myId,
-            recipent: recipentId,
-        });
-        res.status(2001).json({ friendRequest });
-    } catch (error) {
-        console.log("Error in the friend request controller", error.message);
-        return res.status(500).json({ message: "Internal server error" })
+    // prevent sending req to yourself
+    if (myId === recipientId) {
+      return res.status(400).json({ message: "You can't send friend request to yourself" });
     }
+
+    const recipient = await User.findById(recipientId);
+    if (!recipient) {
+      return res.status(404).json({ message: "Recipient not found" });
+    }
+
+    // check if user is already friends
+    if (recipient.friends.includes(myId)) {
+      return res.status(400).json({ message: "You are already friends with this user" });
+    }
+
+    // check if a req already exists
+    const existingRequest = await FriendRequest.findOne({
+      $or: [
+        { sender: myId, recipient: recipientId },
+        { sender: recipientId, recipient: myId },
+      ],
+    });
+
+    if (existingRequest) {
+      return res
+        .status(400)
+        .json({ message: "A friend request already exists between you and this user" });
+    }
+
+    const friendRequest = await FriendRequest.create({
+      sender: myId,
+      recipient: recipientId,
+    });
+
+    res.status(201).json(friendRequest);
+  } catch (error) {
+    console.error("Error in sendFriendRequest controller", error.message);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
 }
 
 

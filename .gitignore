@@ -1,29 +1,56 @@
-# Node modules for both client and server
+# =============================
+# Node modules (client & server)
+# =============================
+node_modules/
 client/node_modules/
 server/node_modules/
 
-# Build output
+# =============================
+# Build output (Vite/Node)
+# =============================
+dist/
+dist-ssr/
 client/dist/
 server/dist/
 
-# Logs
+# =============================
+# Logs & debug
+# =============================
+logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-# dotenv environment variables
+# =============================
+# Environment variables
+# =============================
+.env
 *.env
+*.local
 
-# Mac system files
-.DS_Store
+# =============================
+# OS system files
+# =============================
+.DS_Store       # macOS
+Thumbs.db       # Windows
 
-# Windows system files
-Thumbs.db
-
-# IDE settings (VS Code, etc.)
+# =============================
+# IDE/editor configs
+# =============================
 .vscode/
+.vscode/*
+!.vscode/extensions.json
 .idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
 
-# Optional: coverage reports
+# =============================
+# Test/coverage output
+# =============================
 coverage/
